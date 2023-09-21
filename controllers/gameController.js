@@ -38,10 +38,18 @@ const createGame = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.createGame = createGame;
 const updateGame = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
+    const id = req.params.id;
     const updatedGame = req.body;
-    const result = yield gamesCollection.updateOne({ id: Number(id) }, { $set: updatedGame });
-    result.matchedCount > 0 ? res.json(updatedGame) : res.status(404).json({ message: "Game not found" });
+    delete updatedGame._id;
+    const filter = { id: Number(id) };
+    const update = { $set: updatedGame };
+    const result = yield gamesCollection.updateOne(filter, update);
+    if (result.matchedCount > 0) {
+        res.json(updatedGame);
+    }
+    else {
+        res.status(404).json({ message: "Game not found" });
+    }
 });
 exports.updateGame = updateGame;
 const deleteGame = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
