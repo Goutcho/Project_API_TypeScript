@@ -17,12 +17,6 @@ http://localhost:5001/api/
 
 ---
 
-## Authentification
-
-[À compléter si applicable]
-
----
-
 ## Routes
 
 ### Jeux
