@@ -31,13 +31,20 @@ export const createCustomer = async (req: Request, res: Response): Promise<void>
 };
 
 export const updateCustomer = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
-  const updatedCustomer = req.body;
-  const result = await customersCollection.updateOne(
-    { id: Number(id) },
-    { $set: updatedCustomer }
-  );
-  result.matchedCount > 0 ? res.json(updatedCustomer) : res.status(404).json({ message: "Customer not found" });
+  const id = req.params.id; 
+  const updatedCustomer: any = req.body;  
+
+  delete updatedCustomer._id;
+
+  const filter = { id: Number(id) };
+  const update = { $set: updatedCustomer };
+  const result = await customersCollection.updateOne(filter, update);
+
+  if (result.matchedCount > 0) {
+    res.json(updatedCustomer);
+  } else {
+    res.status(404).json({ message: "Customer not found" });
+  }
 };
 
 export const deleteCustomer = async (req: Request, res: Response): Promise<void> => {
