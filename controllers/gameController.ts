@@ -31,14 +31,23 @@ export const createGame = async (req: Request, res: Response): Promise<void> => 
 };
 
 export const updateGame = async (req: Request, res: Response): Promise<void> => {
-  const { id } = req.params;
-  const updatedGame = req.body;
-  const result = await gamesCollection.updateOne(
-    { id: Number(id) },
-    { $set: updatedGame }
-  );
-  result.matchedCount > 0 ? res.json(updatedGame) : res.status(404).json({ message: "Game not found" });
+  const id = req.params.id;
+  const updatedGame: any = req.body;
+
+  delete updatedGame._id;
+
+  const filter = { id: Number(id) };
+  const update = { $set: updatedGame };
+
+  const result = await gamesCollection.updateOne(filter, update);
+
+  if (result.matchedCount > 0) {
+    res.json(updatedGame);
+  } else {
+    res.status(404).json({ message: "Game not found" });
+  }
 };
+
 
 export const deleteGame = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
