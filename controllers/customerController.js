@@ -38,10 +38,18 @@ const createCustomer = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.createCustomer = createCustomer;
 const updateCustomer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
+    const id = req.params.id;
     const updatedCustomer = req.body;
-    const result = yield customersCollection.updateOne({ id: Number(id) }, { $set: updatedCustomer });
-    result.matchedCount > 0 ? res.json(updatedCustomer) : res.status(404).json({ message: "Customer not found" });
+    delete updatedCustomer._id;
+    const filter = { id: Number(id) };
+    const update = { $set: updatedCustomer };
+    const result = yield customersCollection.updateOne(filter, update);
+    if (result.matchedCount > 0) {
+        res.json(updatedCustomer);
+    }
+    else {
+        res.status(404).json({ message: "Customer not found" });
+    }
 });
 exports.updateCustomer = updateCustomer;
 const deleteCustomer = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
