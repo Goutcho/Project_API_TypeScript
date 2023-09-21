@@ -1,5 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 import { connectDB, getDB } from "./db";
+import cors from "cors";
 import gameRoutes from "./routes/gameRoutes";
 import customerRoutes from "./routes/customerRoutes";
 
@@ -7,6 +8,8 @@ import customerRoutes from "./routes/customerRoutes";
 const app: Application = express();
 
 app.use(express.json());
+
+app.use(cors());
 
 connectDB();
 
@@ -17,8 +20,8 @@ app.get('/', (req, res) => {
   });
   
 
-app.listen(3000, (): void => {
-  console.log("Le serveur est actif sur le port 3000");
+app.listen(5001, (): void => {
+  console.log("Le serveur est actif sur le port 5001");
 });
 
 export default app;
